@@ -91,3 +91,7 @@ class marksSerializer(serializers.ModelSerializer):
         return instance
 
 
+class jiraSerializer(serializers.Serializer):
+   groupID = serializers.IntegerField()
+   progress = serializers.FloatField()
+

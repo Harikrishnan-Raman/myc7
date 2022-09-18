@@ -161,4 +161,44 @@ def marks_list(request):
 
 
 
+from jira import JIRA
+from jira import JIRAError
 
+user = '2021cfse011@wilp.bits-pilani.ac.in'
+apikey = 'HjlwMTU1hv3ZQLvGLqmFC878'
+server = 'https://bits-pilani-csis-fse.atlassian.net/'
+
+options = {
+    'server': server
+}
+
+
+@api_view(['GET'])
+def jira_progress(request):
+    jira = JIRA(options, basic_auth=(user, apikey))
+    if request.method == 'GET':
+        groupID = request.GET['groupID']
+        print(groupID)
+        if groupID == "1":
+            jql_str = 'filter=10028'
+        else:
+            jql_str = 'filter=10029'
+        block_size = 20
+        block_num = 0
+        jira_search = jira.search_issues(jql_str, startAt=block_num * block_size, maxResults=block_size,
+                                     fields="timeoriginalestimate, timespent")
+        if bool(jira_search):
+            data_jira = []
+
+            for issue in jira_search:
+                timespent = (issue.fields.timespent)
+                if timespent is None:
+                    timespent = 0
+                timeoriginalestimate = (issue.fields.timeoriginalestimate)
+                if timeoriginalestimate is None:
+                    timeoriginalestimate = 0
+        jira.close()
+        jiraProgress = float(timespent/timeoriginalestimate)
+        jiradata={"groupID": groupID, "progress" : jiraProgress}
+        results= jiraSerializer(jiradata, many=False).data
+        return Response(results)

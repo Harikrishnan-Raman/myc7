@@ -15,4 +15,5 @@ urlpatterns = [
     re_path(r'^api/assignments/$', views.assignment_list),
     re_path(r'^api/assignment/(?P<pk>[0-9]+)$', views.assignment_detail),
     re_path(r'^api/marks/$', views.marks_list),
+    re_path(r'^api/jira/$', views.jira_progress),
 ]
