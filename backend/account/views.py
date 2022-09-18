@@ -165,12 +165,14 @@ from jira import JIRA
 from jira import JIRAError
 
 user = '2021cfse011@wilp.bits-pilani.ac.in'
-apikey = 'HjlwMTU1hv3ZQLvGLqmFC878'
+apikey = '2ESQimhoZHR5D02AwwRIE323'
 server = 'https://bits-pilani-csis-fse.atlassian.net/'
 
 options = {
     'server': server
 }
+
+#jira = JIRA(options, basic_auth=(user, apikey))
 
 
 @api_view(['GET'])
@@ -181,8 +183,10 @@ def jira_progress(request):
         print(groupID)
         if groupID == "1":
             jql_str = 'filter=10028'
-        else:
+        elif groupID == "2":
             jql_str = 'filter=10029'
+        else:
+            jql_str = 'filter=10030'
         block_size = 20
         block_num = 0
         jira_search = jira.search_issues(jql_str, startAt=block_num * block_size, maxResults=block_size,
